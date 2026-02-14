@@ -1,0 +1,865 @@
+{
+  "info": {
+    "name": "Parking System API",
+    "description": "Complete API collection for Parking Reservation System built with NestJS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "parking-system"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('token', jsonData.token);",
+                  "    pm.environment.set('userId', jsonData.user.id);",
+                  "    pm.environment.set('userRole', jsonData.user.role);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"adminpass\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login with username and password. Returns user info and authentication token."
+          },
+          "response": []
+        },
+        {
+          "name": "Signup",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"newuser\",\n  \"password\": \"password123\",\n  \"email\": \"user@example.com\",\n  \"fullName\": \"New User\",\n  \"phone\": \"+1234567890\",\n  \"companyName\": \"Company Inc.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "signup"]
+            },
+            "description": "Create a new user account"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Master Data",
+      "item": [
+        {
+          "name": "Get All Gates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/master/gates",
+              "host": ["{{baseUrl}}"],
+              "path": ["master", "gates"]
+            },
+            "description": "Get all parking gates with their associated zone IDs"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Zones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/master/zones",
+              "host": ["{{baseUrl}}"],
+              "path": ["master", "zones"]
+            },
+            "description": "Get all parking zones with availability info"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Zones by Gate",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/master/zones?gateId=gate_1",
+              "host": ["{{baseUrl}}"],
+              "path": ["master", "zones"],
+              "query": [
+                {
+                  "key": "gateId",
+                  "value": "gate_1",
+                  "description": "Filter zones by gate ID"
+                }
+              ]
+            },
+            "description": "Get zones filtered by specific gate"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/master/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["master", "categories"]
+            },
+            "description": "Get all parking categories (Premium, Regular, Economy, VIP)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Zones",
+      "item": [
+        {
+          "name": "Get All Zones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/zones",
+              "host": ["{{baseUrl}}"],
+              "path": ["zones"]
+            },
+            "description": "Get all zones with detailed information"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Zone by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/zones/zone_a",
+              "host": ["{{baseUrl}}"],
+              "path": ["zones", "zone_a"]
+            },
+            "description": "Get specific zone by ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Gates",
+      "item": [
+        {
+          "name": "Get All Gates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/gates",
+              "host": ["{{baseUrl}}"],
+              "path": ["gates"]
+            },
+            "description": "Get all gates"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Gate by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/gates/gate_1",
+              "host": ["{{baseUrl}}"],
+              "path": ["gates", "gate_1"]
+            },
+            "description": "Get specific gate by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Gate Zones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/gates/gate_1/zones",
+              "host": ["{{baseUrl}}"],
+              "path": ["gates", "gate_1", "zones"]
+            },
+            "description": "Get all zones accessible from a specific gate"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tickets",
+      "item": [
+        {
+          "name": "Check-in Visitor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('lastTicketId', jsonData.ticket.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"zoneId\": \"zone_a\",\n  \"gateId\": \"gate_1\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tickets/checkin",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "checkin"]
+            },
+            "description": "Check-in a visitor (no plate number)"
+          },
+          "response": []
+        },
+        {
+          "name": "Check-in Subscriber",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('lastTicketId', jsonData.ticket.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"zoneId\": \"zone_a\",\n  \"gateId\": \"gate_1\",\n  \"plate\": \"ABC-123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tickets/checkin",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "checkin"]
+            },
+            "description": "Check-in a subscriber with license plate"
+          },
+          "response": []
+        },
+        {
+          "name": "Check-out",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ticketId\": \"{{lastTicketId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tickets/checkout",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "checkout"]
+            },
+            "description": "Check-out with ticket ID. Calculates parking fee."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Ticket by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/tickets/{{lastTicketId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "{{lastTicketId}}"]
+            },
+            "description": "Get ticket details by ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Subscriptions",
+      "item": [
+        {
+          "name": "Get All Subscriptions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/subscriptions",
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions"]
+            },
+            "description": "Get all subscriptions"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Subscription by Plate",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/subscriptions/plate/ABC-123",
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "plate", "ABC-123"]
+            },
+            "description": "Find subscription by license plate number"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Subscription (Admin)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"John Doe\",\n  \"active\": true,\n  \"category\": \"cat_premium\",\n  \"cars\": [\n    {\n      \"plate\": \"XYZ-789\",\n      \"brand\": \"Toyota\",\n      \"model\": \"Camry\",\n      \"color\": \"silver\"\n    }\n  ],\n  \"startsAt\": \"2026-02-01T00:00:00Z\",\n  \"expiresAt\": \"2027-02-01T00:00:00Z\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/subscriptions",
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions"]
+            },
+            "description": "Create a new subscription (Admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Reports",
+          "item": [
+            {
+              "name": "Get Parking State Report",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/reports/parking-state",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "reports", "parking-state"]
+                },
+                "description": "Get comprehensive parking state report for all zones"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Users",
+          "item": [
+            {
+              "name": "Get All Users",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/users",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "users"]
+                },
+                "description": "Get all users (Admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Create User",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"newemployee\",\n  \"password\": \"pass123\",\n  \"role\": \"employee\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/users",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "users"]
+                },
+                "description": "Create a new user (Admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Update User",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"newpass123\",\n  \"active\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/users/emp_1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "users", "emp_1"]
+                },
+                "description": "Update user details (Admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete User",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/users/emp_1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "users", "emp_1"]
+                },
+                "description": "Delete a user (Admin only)"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Categories",
+          "item": [
+            {
+              "name": "Update Category Rates",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rateNormal\": 6.0,\n  \"rateSpecial\": 9.0,\n  \"name\": \"Premium Plus\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/categories/cat_premium",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "categories", "cat_premium"]
+                },
+                "description": "Update category pricing and name (Admin only)"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Zones",
+          "item": [
+            {
+              "name": "Open Zone",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"open\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/zones/zone_a/open",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "zones", "zone_a", "open"]
+                },
+                "description": "Open a zone (Admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Close Zone",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"open\": false\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/zones/zone_a/open",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "zones", "zone_a", "open"]
+                },
+                "description": "Close a zone (Admin only)"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Rush Hours",
+          "item": [
+            {
+              "name": "Get Rush Hours",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/rush-hours",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "rush-hours"]
+                },
+                "description": "Get all rush hour periods (Admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Rush Hour",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"weekDay\": 1,\n  \"from\": \"08:00\",\n  \"to\": \"10:00\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/rush-hours",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "rush-hours"]
+                },
+                "description": "Add new rush hour period (Admin only). weekDay: 0=Sunday, 1=Monday, etc."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Vacations",
+          "item": [
+            {
+              "name": "Get Vacations",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/vacations",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "vacations"]
+                },
+                "description": "Get all vacation periods (Admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Vacation",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Spring Break\",\n  \"from\": \"2026-03-15\",\n  \"to\": \"2026-03-22\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/vacations",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "vacations"]
+                },
+                "description": "Add new vacation period (Admin only)"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Subscriptions",
+          "item": [
+            {
+              "name": "Get All Subscriptions",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/subscriptions",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "subscriptions"]
+                },
+                "description": "Get all subscriptions (Admin only)"
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userRole",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "lastTicketId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
