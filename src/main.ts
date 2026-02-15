@@ -29,11 +29,4 @@ async function bootstrap() {
   console.log(`Parking backend NestJS listening on http://localhost:${port}${process.env.BASE_PATH || '/api/v1'}`);
 }
 
-// For Vercel serverless
-if (process.env.VERCEL) {
-  bootstrap();
-} else {
-  bootstrap();
-}
-
-export default bootstrap;
+bootstrap();
