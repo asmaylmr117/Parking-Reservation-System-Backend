@@ -13,7 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Subscription } from '../../entities/subscription.entity';
 import { AdminGuard } from '../../guards/auth.guard';
-import { v4 as uuidv4 } from 'uuid';
+import { generateSubscriptionId, isValidSubscriptionId } from '../../utils/id-generator.util';
 
 @Controller('subscriptions')
 export class SubscriptionsController {
@@ -66,8 +66,11 @@ export class SubscriptionsController {
   @Post()
   @UseGuards(AdminGuard)
   async create(@Body() body: any, @Request() req) {
+    // Generate ultra-secure subscription ID
+    const secureId = generateSubscriptionId();
+
     const subscription = this.subscriptionRepository.create({
-      id: 'sub_' + uuidv4().split('-')[0],
+      id: secureId,
       userName: body.userName,
       active: body.active !== undefined ? body.active : true,
       category: body.category,
@@ -78,6 +81,19 @@ export class SubscriptionsController {
       userId: body.userId,
     });
 
-    return await this.subscriptionRepository.save(subscription);
+    const savedSubscription = await this.subscriptionRepository.save(subscription);
+
+    // Return subscription with masked ID for display
+    return {
+      ...savedSubscription,
+      displayId: this.maskSubscriptionId(savedSubscription.id),
+    };
+  }
+
+  // Helper method to mask ID for display
+  private maskSubscriptionId(id: string): string {
+    const parts = id.split('-');
+    if (parts.length < 6) return id;
+    return `${parts[0]}-${parts[1]}-${parts[2]}-*****-*****-${parts[5]}`;
   }
 }
