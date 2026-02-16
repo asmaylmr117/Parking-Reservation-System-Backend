@@ -27,6 +27,22 @@ export class SubscriptionsController {
     return await this.subscriptionRepository.find();
   }
 
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    const subscription = await this.subscriptionRepository.findOne({
+      where: { id },
+    });
+
+    if (!subscription) {
+      throw new HttpException(
+        { status: 'error', message: 'Subscription not found' },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return subscription;
+  }
+
   @Get('plate/:plate')
   async findByPlate(@Param('plate') plate: string) {
     const subscription = await this.subscriptionRepository
