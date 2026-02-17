@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Body,
   Param,
   UseGuards,
@@ -87,6 +88,36 @@ export class SubscriptionsController {
     return {
       ...savedSubscription,
       displayId: this.maskSubscriptionId(savedSubscription.id),
+    };
+  }
+
+  @Put(':id')
+  @UseGuards(AdminGuard)
+  async update(@Param('id') id: string, @Body() body: any) {
+    const subscription = await this.subscriptionRepository.findOne({
+      where: { id },
+    });
+
+    if (!subscription) {
+      throw new HttpException(
+        { status: 'error', message: 'Subscription not found' },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    // Update subscription fields
+    subscription.userName = body.userName !== undefined ? body.userName : subscription.userName;
+    subscription.active = body.active !== undefined ? body.active : subscription.active;
+    subscription.category = body.category !== undefined ? body.category : subscription.category;
+    subscription.cars = body.cars !== undefined ? body.cars : subscription.cars;
+    subscription.startsAt = body.startsAt !== undefined ? body.startsAt : subscription.startsAt;
+    subscription.expiresAt = body.expiresAt !== undefined ? body.expiresAt : subscription.expiresAt;
+
+    const updatedSubscription = await this.subscriptionRepository.save(subscription);
+
+    return {
+      ...updatedSubscription,
+      displayId: this.maskSubscriptionId(updatedSubscription.id),
     };
   }
 
