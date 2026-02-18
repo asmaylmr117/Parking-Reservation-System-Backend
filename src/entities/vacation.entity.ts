@@ -13,4 +13,7 @@ export class Vacation {
 
   @Column('date')
   to: Date;
+
+  @Column({ default: true })
+  active: boolean;
 }

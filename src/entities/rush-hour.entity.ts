@@ -13,4 +13,7 @@ export class RushHour {
 
   @Column()
   to: string;
+
+  @Column({ default: true })
+  active: boolean;
 }

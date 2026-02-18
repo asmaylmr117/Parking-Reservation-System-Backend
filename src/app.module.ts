@@ -11,6 +11,8 @@ import { TicketsModule } from './modules/tickets/tickets.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module';
 import { WebsocketModule } from './modules/websocket/websocket.module';
+import { RushHoursModule } from './modules/rushhours/rush-hours.module';
+import { VacationsModule } from './modules/vacations/vacations.module';
 import { AuthGuard } from './guards/auth.guard';
 import { User } from './entities/user.entity';
 
@@ -27,6 +29,8 @@ import { User } from './entities/user.entity';
     GatesModule,
     TicketsModule,
     AdminModule,
+    RushHoursModule,
+    VacationsModule,
     SubscriptionsModule,
     WebsocketModule,
   ],
