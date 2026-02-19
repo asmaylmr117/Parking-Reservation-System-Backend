@@ -45,33 +45,38 @@ export class AdminController {
   ) {}
 
   @Get('reports/parking-state')
-  async getParkingState() {
-    const zones = await this.zoneRepository.find();
-    const report = await Promise.all(
-      zones.map(async (zone) => {
-        const state = await this.zonesService.computeZonePayload(zone);
-        const subscriberCount = await this.subscriptionRepository.count({
-          where: { category: zone.categoryId, active: true },
-        });
+async getParkingState() {
+  const zones = await this.zoneRepository.find({
+    relations: ['gates'] 
+  });
+  
+  const report = await Promise.all(
+    zones.map(async (zone) => {
+      const state = await this.zonesService.computeZonePayload(zone);
+      const subscriberCount = await this.subscriptionRepository.count({
+        where: { category: zone.categoryId, active: true },
+      });
 
-        return {
-          zoneId: zone.id,
-          name: zone.name,
-          totalSlots: zone.totalSlots,
-          occupied: state.occupied,
-          free: state.free,
-          reserved: state.reserved,
-          availableForVisitors: state.availableForVisitors,
-          availableForSubscribers: state.availableForSubscribers,
-          subscriberCount,
-          open: zone.open,
-        };
-      }),
-    );
+      return {
+        id: zone.id,  
+        zoneId: zone.id,
+        name: zone.name,
+        categoryId: zone.categoryId,  
+        totalSlots: zone.totalSlots,
+        occupied: state.occupied,
+        free: state.free,
+        reserved: state.reserved,
+        availableForVisitors: state.availableForVisitors,
+        availableForSubscribers: state.availableForSubscribers,
+        subscriberCount,
+        open: zone.open,
+        gateId: zone.gates?.[0]?.id || null, 
+      };
+    })
+  );
 
-    return report;
-  }
-
+  return { zones: report };
+}
   @Put('categories/:id')
   async updateCategory(
     @Param('id') id: string,

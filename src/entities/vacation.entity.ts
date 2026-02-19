@@ -8,11 +8,11 @@ export class Vacation {
   @Column()
   name: string;
 
-  @Column('date')
-  from: Date;
+  @Column()
+  from: string;
 
-  @Column('date')
-  to: Date;
+  @Column()
+  to: string;
 
   @Column({ default: true })
   active: boolean;

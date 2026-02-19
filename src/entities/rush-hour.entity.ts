@@ -5,7 +5,7 @@ export class RushHour {
   @PrimaryColumn()
   id: string;
 
-  @Column('int')
+  @Column()
   weekDay: number;
 
   @Column()
