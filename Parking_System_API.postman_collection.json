@@ -70,6 +70,30 @@
             "description": "Create a new user account"
           },
           "response": []
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "profile"]
+            },
+            "description": "Get current user profile information"
+          },
+          "response": []
         }
       ]
     },
@@ -136,6 +160,46 @@
               "path": ["master", "categories"]
             },
             "description": "Get all parking categories (Premium, Regular, Economy, VIP)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Parking Operations",
+      "item": [
+        {
+          "name": "Get Available Spots",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/parking/available?zoneId=zone_a",
+              "host": ["{{baseUrl}}"],
+              "path": ["parking", "available"],
+              "query": [
+                {
+                  "key": "zoneId",
+                  "value": "zone_a",
+                  "description": "Zone ID to check availability"
+                }
+              ]
+            },
+            "description": "Get available parking spots in a zone"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Parking Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/parking/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["parking", "status"]
+            },
+            "description": "Get real-time parking status across all zones"
           },
           "response": []
         }
@@ -334,6 +398,69 @@
             "description": "Get ticket details by ID"
           },
           "response": []
+        },
+        {
+          "name": "Get Active Tickets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/tickets/active",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "active"]
+            },
+            "description": "Get all active (checked-in) tickets"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tickets by Date Range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/tickets/history?from=2026-02-01&to=2026-02-19",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "history"],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "2026-02-01",
+                  "description": "Start date"
+                },
+                {
+                  "key": "to",
+                  "value": "2026-02-19",
+                  "description": "End date"
+                }
+              ]
+            },
+            "description": "Get tickets within a specific date range"
+          },
+          "response": []
+        },
+        {
+          "name": "Calculate Parking Fee",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ticketId\": \"{{lastTicketId}}\",\n  \"checkoutTime\": \"2026-02-19T10:30:00Z\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tickets/calculate-fee",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "calculate-fee"]
+            },
+            "description": "Calculate parking fee without checking out"
+          },
+          "response": []
         }
       ]
     },
@@ -430,6 +557,101 @@
                   "path": ["admin", "reports", "parking-state"]
                 },
                 "description": "Get comprehensive parking state report for all zones"
+              },
+              "response": []
+            },
+            {
+              "name": "Revenue Report",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/reports/revenue?from=2026-02-01&to=2026-02-19",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "reports", "revenue"],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "2026-02-01"
+                    },
+                    {
+                      "key": "to",
+                      "value": "2026-02-19"
+                    }
+                  ]
+                },
+                "description": "Get revenue report for a specific period"
+              },
+              "response": []
+            },
+            {
+              "name": "Occupancy Report",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/reports/occupancy?date=2026-02-19",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "reports", "occupancy"],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2026-02-19"
+                    }
+                  ]
+                },
+                "description": "Get occupancy report for a specific date"
+              },
+              "response": []
+            },
+            {
+              "name": "Peak Hours Report",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/reports/peak-hours?days=30",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "reports", "peak-hours"],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "30",
+                      "description": "Number of days to analyze"
+                    }
+                  ]
+                },
+                "description": "Analyze peak hours based on historical data"
               },
               "response": []
             }
@@ -558,6 +780,63 @@
           "name": "Categories",
           "item": [
             {
+              "name": "Get All Categories",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/categories",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "categories"]
+                },
+                "description": "Get all categories with details (Admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Category",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Executive\",\n  \"code\": \"cat_executive\",\n  \"rateNormal\": 10.0,\n  \"rateSpecial\": 15.0\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/categories",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "categories"]
+                },
+                "description": "Create a new category (Admin only)"
+              },
+              "response": []
+            },
+            {
               "name": "Update Category Rates",
               "request": {
                 "auth": {
@@ -589,12 +868,269 @@
                 "description": "Update category pricing and name (Admin only)"
               },
               "response": []
+            },
+            {
+              "name": "Delete Category",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/categories/cat_premium",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "categories", "cat_premium"]
+                },
+                "description": "Delete a category (Admin only)"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Gates",
+          "item": [
+            {
+              "name": "Get All Gates",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/gates",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "gates"]
+                },
+                "description": "Get all gates with details (Admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Gate",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"North Gate\",\n  \"code\": \"gate_north\",\n  \"zoneIds\": [\"zone_a\", \"zone_b\"]\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/gates",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "gates"]
+                },
+                "description": "Create a new gate (Admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Gate",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Main Entrance Updated\",\n  \"active\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/gates/gate_1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "gates", "gate_1"]
+                },
+                "description": "Update gate information (Admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Gate",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/gates/gate_1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "gates", "gate_1"]
+                },
+                "description": "Delete a gate (Admin only)"
+              },
+              "response": []
             }
           ]
         },
         {
           "name": "Zones",
           "item": [
+            {
+              "name": "Get All Zones",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/zones",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "zones"]
+                },
+                "description": "Get all zones with details (Admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Zone",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Zone C\",\n  \"code\": \"zone_c\",\n  \"capacity\": 100,\n  \"categoryId\": \"cat_regular\",\n  \"gateIds\": [\"gate_1\", \"gate_2\"]\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/zones",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "zones"]
+                },
+                "description": "Create a new zone (Admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Zone",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Premium Zone Updated\",\n  \"capacity\": 150\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/zones/zone_a",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "zones", "zone_a"]
+                },
+                "description": "Update zone information (Admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Zone",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/zones/zone_a",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "zones", "zone_a"]
+                },
+                "description": "Delete a zone (Admin only)"
+              },
+              "response": []
+            },
             {
               "name": "Open Zone",
               "request": {
@@ -722,6 +1258,63 @@
                 "description": "Add new rush hour period (Admin only). weekDay: 0=Sunday, 1=Monday, etc."
               },
               "response": []
+            },
+            {
+              "name": "Update Rush Hour",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"weekDay\": 1,\n  \"from\": \"07:30\",\n  \"to\": \"09:30\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/rush-hours/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "rush-hours", "1"]
+                },
+                "description": "Update rush hour period (Admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Rush Hour",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/rush-hours/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "rush-hours", "1"]
+                },
+                "description": "Delete rush hour period (Admin only)"
+              },
+              "response": []
             }
           ]
         },
@@ -784,6 +1377,63 @@
                 "description": "Add new vacation period (Admin only)"
               },
               "response": []
+            },
+            {
+              "name": "Update Vacation",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Spring Break Extended\",\n  \"from\": \"2026-03-15\",\n  \"to\": \"2026-03-25\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/vacations/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "vacations", "1"]
+                },
+                "description": "Update vacation period (Admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Vacation",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/vacations/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "vacations", "1"]
+                },
+                "description": "Delete vacation period (Admin only)"
+              },
+              "response": []
             }
           ]
         },
@@ -815,6 +1465,42 @@
               "response": []
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "WebSocket Events",
+      "item": [
+        {
+          "name": "Parking Status Updates",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "console.log('Listening for parking status updates...');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "ws://localhost:3000?token={{token}}",
+              "protocol": "ws",
+              "host": ["localhost:3000"],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "{{token}}"
+                }
+              ]
+            },
+            "description": "WebSocket connection for real-time parking status updates. Events: 'parkingStatus', 'ticketCreated', 'ticketClosed'"
+          },
+          "response": []
         }
       ]
     }
@@ -858,6 +1544,41 @@
     },
     {
       "key": "lastTicketId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "wsUrl",
+      "value": "ws://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "lastSubscriptionId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "lastCategoryId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "lastRushHourId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "lastVacationId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "lastGateId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "lastZoneId",
       "value": "",
       "type": "string"
     }
