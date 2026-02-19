@@ -6,8 +6,13 @@ import { WsAdapter } from '@nestjs/platform-ws';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS
-  app.enableCors();
+  // Enable CORS with specific origin
+  app.enableCors({
+    origin: 'https://parking-reservation-system-nine.vercel.app',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  });
 
   // Use WebSocket adapter
   app.useWebSocketAdapter(new WsAdapter(app));
@@ -27,6 +32,7 @@ async function bootstrap() {
   await app.listen(port);
 
   console.log(`Parking backend NestJS listening on http://localhost:${port}${process.env.BASE_PATH || '/api/v1'}`);
+  console.log(`CORS enabled for: https://parking-reservation-system-nine.vercel.app`);
 }
 
 bootstrap();
